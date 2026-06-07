@@ -4,304 +4,283 @@
 #include <fstream>
 #include <algorithm>
 
-// ==========================================
-// HIERARCHIA KLAS (Zgodna ze schematem PDF)
-// ==========================================
-
-// --- POZIOM 1: KORZEŃ ---
-class ClassA {
+class KlasaA {
 protected:
-    std::string protectedFieldA;
+    std::string chronionePoleA;
 private:
-    std::string objectName;
-    std::string className;
+    std::string nazwaObiektu;
+    std::string nazwaKlasy;
 public:
-    ClassA(std::string name, std::string cls) : objectName(name), className(cls), protectedFieldA("ProtA") {}
-    virtual ~ClassA() = default;
+    KlasaA(std::string p_nazwa, std::string p_klasa) : nazwaObiektu(p_nazwa), nazwaKlasy(p_klasa), chronionePoleA("ProtA") {}
+    virtual ~KlasaA() = default;
 
-    std::string getName() const { return objectName; }
-    void setName(const std::string& newName) { objectName = newName; }
-    std::string getClassName() const { return className; }
+    std::string pobierzNazwe() const { return nazwaObiektu; }
+    void ustawNazwe(const std::string& p_nowaNazwa) { nazwaObiektu = p_nowaNazwa; }
+    std::string pobierzNazweKlasy() const { return nazwaKlasy; }
 
-    virtual void show() const = 0;
+    virtual void wyswietl() const = 0;
 
-    virtual bool inheritsFrom(const std::string& node) const {
-        return node == "A";
+    virtual bool dziedziczyZ(const std::string& p_wezel) const {
+        return p_wezel == "A";
     }
 
-    virtual std::string serialize() const {
-        return className + " " + objectName;
+    virtual std::string serializuj() const {
+        return nazwaKlasy + " " + nazwaObiektu;
     }
 };
 
-// --- POZIOM 2: WĘZŁY POŚREDNIE I LIŚĆ B ---
-
-// Liść B (bezpośredni potomek A)
-class ClassB : public ClassA {
+class KlasaB : public KlasaA {
 protected:
-    int protectedFieldB;
+    int chronionePoleB;
 private:
-    double privateFieldB;
+    double prywatnePoleB;
 public:
-    ClassB(std::string name) : ClassA(name, "B"), protectedFieldB(20), privateFieldB(2.5) {}
+    KlasaB(std::string p_nazwa) : KlasaA(p_nazwa, "B"), chronionePoleB(20), prywatnePoleB(2.5) {}
 
-    void show() const override {
-        std::cout << "[Klasa B] Nazwa: " << getName() << ", Prot: " << protectedFieldB << ", Priv: " << privateFieldB << "\n";
+    void wyswietl() const override {
+        std::cout << "[Klasa B] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleB << ", Prywatne: " << prywatnePoleB << "\n";
     }
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "B" || ClassA::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "B" || KlasaA::dziedziczyZ(p_wezel);
     }
 };
 
-// Węzeł C
-class ClassC : public ClassA {
+class KlasaC : public KlasaA {
 protected:
-    std::string protectedFieldC;
+    std::string chronionePoleC;
 private:
-    int privateFieldC;
+    int prywatnePoleC;
 public:
-    ClassC(std::string name, std::string cls) : ClassA(name, cls), protectedFieldC("ProtC"), privateFieldC(30) {}
+    KlasaC(std::string p_nazwa, std::string p_klasa) : KlasaA(p_nazwa, p_klasa), chronionePoleC("ProtC"), prywatnePoleC(30) {}
 
-    void show() const override {} // Węzeł pośredni
+    void wyswietl() const override {}
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "C" || ClassA::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "C" || KlasaA::dziedziczyZ(p_wezel);
     }
 };
 
-// Węzeł D
-class ClassD : public ClassA {
+class KlasaD : public KlasaA {
 protected:
-    bool protectedFieldD;
+    bool chronionePoleD;
 private:
-    char privateFieldD;
+    char prywatnePoleD;
 public:
-    ClassD(std::string name, std::string cls) : ClassA(name, cls), protectedFieldD(true), privateFieldD('D') {}
+    KlasaD(std::string p_nazwa, std::string p_klasa) : KlasaA(p_nazwa, p_klasa), chronionePoleD(true), prywatnePoleD('D') {}
 
-    void show() const override {} // Węzeł pośredni
+    void wyswietl() const override {}
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "D" || ClassA::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "D" || KlasaA::dziedziczyZ(p_wezel);
     }
 };
 
-// Węzeł E
-class ClassE : public ClassA {
+class KlasaE : public KlasaA {
 protected:
-    float protectedFieldE;
+    float chronionePoleE;
 private:
-    long privateFieldE;
+    long prywatnePoleE;
 public:
-    ClassE(std::string name, std::string cls) : ClassA(name, cls), protectedFieldE(5.5f), privateFieldE(50000) {}
+    KlasaE(std::string p_nazwa, std::string p_klasa) : KlasaA(p_nazwa, p_klasa), chronionePoleE(5.5f), prywatnePoleE(50000) {}
 
-    void show() const override {} // Węzeł pośredni
+    void wyswietl() const override {}
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "E" || ClassA::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "E" || KlasaA::dziedziczyZ(p_wezel);
     }
 };
 
-// --- POZIOM 3: LIŚCIE ---
-
-// Liść F (dziedziczy po C)
-class ClassF : public ClassC {
+class KlasaF : public KlasaC {
 protected:
-    int protectedFieldF;
+    int chronionePoleF;
 private:
-    std::string privateFieldF;
+    std::string prywatnePoleF;
 public:
-    ClassF(std::string name) : ClassC(name, "F"), protectedFieldF(60), privateFieldF("PrivF") {}
+    KlasaF(std::string p_nazwa) : KlasaC(p_nazwa, "F"), chronionePoleF(60), prywatnePoleF("PrivF") {}
 
-    void show() const override {
-        std::cout << "[Klasa F] Nazwa: " << getName() << ", Prot: " << protectedFieldF << ", Priv: " << privateFieldF << "\n";
+    void wyswietl() const override {
+        std::cout << "[Klasa F] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleF << ", Prywatne: " << prywatnePoleF << "\n";
     }
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "F" || ClassC::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "F" || KlasaC::dziedziczyZ(p_wezel);
     }
 };
 
-// Liść G (dziedziczy po C)
-class ClassG : public ClassC {
+class KlasaG : public KlasaC {
 protected:
-    double protectedFieldG;
+    double chronionePoleG;
 private:
-    bool privateFieldG;
+    bool prywatnePoleG;
 public:
-    ClassG(std::string name) : ClassC(name, "G"), protectedFieldG(7.7), privateFieldG(false) {}
+    KlasaG(std::string p_nazwa) : KlasaC(p_nazwa, "G"), chronionePoleG(7.7), prywatnePoleG(false) {}
 
-    void show() const override {
-        std::cout << "[Klasa G] Nazwa: " << getName() << ", Prot: " << protectedFieldG << ", Priv: " << privateFieldG << "\n";
+    void wyswietl() const override {
+        std::cout << "[Klasa G] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleG << ", Prywatne: " << prywatnePoleG << "\n";
     }
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "G" || ClassC::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "G" || KlasaC::dziedziczyZ(p_wezel);
     }
 };
 
-// Liść H (dziedziczy po D)
-class ClassH : public ClassD {
+class KlasaH : public KlasaD {
 protected:
-    char protectedFieldH;
+    char chronionePoleH;
 private:
-    int privateFieldH;
+    int prywatnePoleH;
 public:
-    ClassH(std::string name) : ClassD(name, "H"), protectedFieldH('H'), privateFieldH(80) {}
+    KlasaH(std::string p_nazwa) : KlasaD(p_nazwa, "H"), chronionePoleH('H'), prywatnePoleH(80) {}
 
-    void show() const override {
-        std::cout << "[Klasa H] Nazwa: " << getName() << ", Prot: " << protectedFieldH << ", Priv: " << privateFieldH << "\n";
+    void wyswietl() const override {
+        std::cout << "[Klasa H] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleH << ", Prywatne: " << prywatnePoleH << "\n";
     }
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "H" || ClassD::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "H" || KlasaD::dziedziczyZ(p_wezel);
     }
 };
 
-// Liść I (dziedziczy po D)
-class ClassI : public ClassD {
+class KlasaI : public KlasaD {
 protected:
-    std::string protectedFieldI;
+    std::string chronionePoleI;
 private:
-    float privateFieldI;
+    float prywatnePoleI;
 public:
-    ClassI(std::string name) : ClassD(name, "I"), protectedFieldI("ProtI"), privateFieldI(9.9f) {}
+    KlasaI(std::string p_nazwa) : KlasaD(p_nazwa, "I"), chronionePoleI("ProtI"), prywatnePoleI(9.9f) {}
 
-    void show() const override {
-        std::cout << "[Klasa I] Nazwa: " << getName() << ", Prot: " << protectedFieldI << ", Priv: " << privateFieldI << "\n";
+    void wyswietl() const override {
+        std::cout << "[Klasa I] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleI << ", Prywatne: " << prywatnePoleI << "\n";
     }
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "I" || ClassD::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "I" || KlasaD::dziedziczyZ(p_wezel);
     }
 };
 
-// Liść J (dziedziczy po E)
-class ClassJ : public ClassE {
+class KlasaJ : public KlasaE {
 protected:
-    bool protectedFieldJ;
+    bool chronionePoleJ;
 private:
-    double privateFieldJ;
+    double prywatnePoleJ;
 public:
-    ClassJ(std::string name) : ClassE(name, "J"), protectedFieldJ(true), privateFieldJ(10.1) {}
+    KlasaJ(std::string p_nazwa) : KlasaE(p_nazwa, "J"), chronionePoleJ(true), prywatnePoleJ(10.1) {}
 
-    void show() const override {
-        std::cout << "[Klasa J] Nazwa: " << getName() << ", Prot: " << protectedFieldJ << ", Priv: " << privateFieldJ << "\n";
+    void wyswietl() const override {
+        std::cout << "[Klasa J] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleJ << ", Prywatne: " << prywatnePoleJ << "\n";
     }
 
-    bool inheritsFrom(const std::string& node) const override {
-        return node == "J" || ClassE::inheritsFrom(node);
+    bool dziedziczyZ(const std::string& p_wezel) const override {
+        return p_wezel == "J" || KlasaE::dziedziczyZ(p_wezel);
     }
 };
 
-// ==========================================
-// SYSTEM ZARZĄDZANIA OBIEKTAMI
-// ==========================================
-class ObjectManager {
+class MenedzerObiektow {
 private:
-    std::vector<ClassA*> repository;
-    std::string currentNode = "A";
+    std::vector<KlasaA*> repozytorium;
+    std::string biezacyWezel = "A";
 
-    bool isValidNode(const std::string& node) {
-        std::vector<std::string> nodes = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-        return std::find(nodes.begin(), nodes.end(), node) != nodes.end();
+    bool czyPrawidlowyWezel(const std::string& p_wezel) {
+        std::vector<std::string> wezly = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+        return std::find(wezly.begin(), wezly.end(), p_wezel) != wezly.end();
     }
 
-    bool isLeaf(const std::string& node) {
-        std::vector<std::string> leaves = {"B", "F", "G", "H", "I", "J"};
-        return std::find(leaves.begin(), leaves.end(), node) != leaves.end();
+    bool czyJestLisciem(const std::string& p_wezel) {
+        std::vector<std::string> liscie = {"B", "F", "G", "H", "I", "J"};
+        return std::find(liscie.begin(), liscie.end(), p_wezel) != liscie.end();
     }
 
 public:
-    ~ObjectManager() {
-        for (auto obj : repository) delete obj;
+    ~MenedzerObiektow() {
+        for (auto ob : repozytorium) delete ob;
     }
 
-    void command_CD(const std::string& node) {
-        if (isValidNode(node)) {
-            currentNode = node;
-            std::cout << "Zmieniono wezel na: " << currentNode << "\n";
+    void komenda_CD(const std::string& p_wezel) {
+        if (czyPrawidlowyWezel(p_wezel)) {
+            biezacyWezel = p_wezel;
+            std::cout << "Zmieniono wezel na: " << biezacyWezel << "\n";
         } else {
-            std::cout << "Blad: Wezel '" << node << "' nie istnieje w strukturze.\n";
+            std::cout << "Blad: Wezel '" << p_wezel << "' nie istnieje w strukturze.\n";
         }
     }
 
-    void command_MO(const std::string& name) {
-        if (!isLeaf(currentNode)) {
+    void komenda_MO(const std::string& p_nazwa) {
+        if (!czyJestLisciem(biezacyWezel)) {
             std::cout << "Blad: Obiekty mozna dodawac tylko do lisci (B, F, G, H, I, J).\n";
             return;
         }
 
-        if (currentNode == "B") repository.push_back(new ClassB(name));
-        else if (currentNode == "F") repository.push_back(new ClassF(name));
-        else if (currentNode == "G") repository.push_back(new ClassG(name));
-        else if (currentNode == "H") repository.push_back(new ClassH(name));
-        else if (currentNode == "I") repository.push_back(new ClassI(name));
-        else if (currentNode == "J") repository.push_back(new ClassJ(name));
+        if (biezacyWezel == "B") repozytorium.push_back(new KlasaB(p_nazwa));
+        else if (biezacyWezel == "F") repozytorium.push_back(new KlasaF(p_nazwa));
+        else if (biezacyWezel == "G") repozytorium.push_back(new KlasaG(p_nazwa));
+        else if (biezacyWezel == "H") repozytorium.push_back(new KlasaH(p_nazwa));
+        else if (biezacyWezel == "I") repozytorium.push_back(new KlasaI(p_nazwa));
+        else if (biezacyWezel == "J") repozytorium.push_back(new KlasaJ(p_nazwa));
 
-        std::cout << "Utworzono obiekt '" << name << "' w klasie " << currentNode << ".\n";
+        std::cout << "Utworzono obiekt '" << p_nazwa << "' w klasie " << biezacyWezel << ".\n";
     }
 
-    void command_DO(const std::string& name) {
-        if (!isLeaf(currentNode)) {
+    void komenda_DO(const std::string& p_nazwa) {
+        if (!czyJestLisciem(biezacyWezel)) {
             std::cout << "Blad: Usuwanie jest dozwolone tylko z poziomu liscia.\n";
             return;
         }
 
-        auto it = std::remove_if(repository.begin(), repository.end(),
-            [&](ClassA* p) { return p->getName() == name && p->getClassName() == currentNode; });
+        auto it = std::remove_if(repozytorium.begin(), repozytorium.end(),
+            [&](KlasaA* p) { return p->pobierzNazwe() == p_nazwa && p->pobierzNazweKlasy() == biezacyWezel; });
 
-        if (it != repository.end()) {
+        if (it != repozytorium.end()) {
             delete *it;
-            repository.erase(it, repository.end());
-            std::cout << "Usunieto obiekt '" << name << "' z biezacego liscia.\n";
+            repozytorium.erase(it, repozytorium.end());
+            std::cout << "Usunieto obiekt '" << p_nazwa << "' z biezacego liscia.\n";
         } else {
-            std::cout << "Nie znaleziono obiektu o nazwie '" << name << "' w biezacym lisciu.\n";
+            std::cout << "Nie znaleziono obiektu o nazwie '" << p_nazwa << "' w biezacym lisciu.\n";
         }
     }
 
-    void command_MDO(const std::string& name) {
-        if (!isLeaf(currentNode)) {
+    void komenda_MDO(const std::string& p_nazwa) {
+        if (!czyJestLisciem(biezacyWezel)) {
             std::cout << "Blad: Modyfikacja jest dozwolona tylko z poziomu liscia.\n";
             return;
         }
 
-        for (auto& obj : repository) {
-            if (obj->getName() == name && obj->getClassName() == currentNode) {
-                std::string newName;
-                std::cout << "Podaj nowa nazwe dla obiektu '" << name << "': ";
-                std::cin >> newName;
-                obj->setName(newName);
-                std::cout << "Zmodyfikowano nazwe obiektu na '" << newName << "'.\n";
+        for (auto& ob : repozytorium) {
+            if (ob->pobierzNazwe() == p_nazwa && ob->pobierzNazweKlasy() == biezacyWezel) {
+                std::string nowaNazwa;
+                std::cout << "Podaj nowa nazwe dla obiektu '" << p_nazwa << "': ";
+                std::cin >> nowaNazwa;
+                ob->ustawNazwe(nowaNazwa);
+                std::cout << "Zmodyfikowano nazwe obiektu na '" << nowaNazwa << "'.\n";
                 return;
             }
         }
         std::cout << "Nie znaleziono takiego obiektu w biezacym lisciu.\n";
     }
 
-    void command_DIR() {
-        std::cout << "--- Obiekty widoczne z wezla [" << currentNode << "] ---\n";
-        int count = 0;
-        for (const auto& obj : repository) {
-            if (obj->inheritsFrom(currentNode)) {
-                std::cout << "- " << obj->getName() << " (Klasa liścia: " << obj->getClassName() << ")\n";
-                count++;
+    void komenda_DIR() {
+        std::cout << "--- Obiekty widoczne z wezla [" << biezacyWezel << "] ---\n";
+        int licznik = 0;
+        for (const auto& ob : repozytorium) {
+            if (ob->dziedziczyZ(biezacyWezel)) {
+                std::cout << "- " << ob->pobierzNazwe() << " (Klasa liscia: " << ob->pobierzNazweKlasy() << ")\n";
+                licznik++;
             }
         }
-        if (count == 0) std::cout << "Brak widocznych obiektow.\n";
+        if (licznik == 0) std::cout << "Brak widocznych obiektow.\n";
     }
 
-    void command_SHOW(const std::string& name) {
-        for (const auto& obj : repository) {
-            if (obj->getName() == name) {
-                obj->show();
+    void komenda_SHOW(const std::string& p_nazwa) {
+        for (const auto& ob : repozytorium) {
+            if (ob->pobierzNazwe() == p_nazwa) {
+                ob->wyswietl();
                 return;
             }
         }
-        std::cout << "Obiekt '" << name << "' nie istnieje w calym systemie.\n";
+        std::cout << "Obiekt '" << p_nazwa << "' nie istnieje w calym systemie.\n";
     }
 
-    void command_TREE() {
+    void komenda_TREE() {
         std::cout << "A (Korzen)\n"
                   << " |-- B (Lisc)\n"
                   << " |-- C\n"
@@ -314,33 +293,32 @@ public:
                   << "      |-- J (Lisc)\n";
     }
 
-    void command_SAVE() {
-        std::ofstream file("baza_obiektow.txt");
-        if (file.is_open()) {
-            for (const auto& obj : repository) {
-                file << obj->serialize() << "\n";
+    void komenda_SAVE() {
+        std::ofstream plik("baza_obiektow.txt");
+        if (plik.is_open()) {
+            for (const auto& ob : repozytorium) {
+                plik << ob->serializuj() << "\n";
             }
-            std::cout << "Zapisano zbiór obiektów do pliku 'baza_obiektow.txt'\n";
+            std::cout << "Zapisano zbior obiektow do pliku 'baza_obiektow.txt'\n";
         } else {
             std::cout << "Blad otwarcia pliku do zapisu.\n";
         }
     }
 
-    void command_READ() {
-        std::ifstream file("baza_obiektow.txt");
-        if (file.is_open()) {
-            // Czyszczenie obecnego repozytorium przed wczytaniem nowej bazy
-            for (auto obj : repository) delete obj;
-            repository.clear();
+    void komenda_READ() {
+        std::ifstream plik("baza_obiektow.txt");
+        if (plik.is_open()) {
+            for (auto ob : repozytorium) delete ob;
+            repozytorium.clear();
 
-            std::string cls, name;
-            while (file >> cls >> name) {
-                if (cls == "B") repository.push_back(new ClassB(name));
-                else if (cls == "F") repository.push_back(new ClassF(name));
-                else if (cls == "G") repository.push_back(new ClassG(name));
-                else if (cls == "H") repository.push_back(new ClassH(name));
-                else if (cls == "I") repository.push_back(new ClassI(name));
-                else if (cls == "J") repository.push_back(new ClassJ(name));
+            std::string kl, nazwa;
+            while (plik >> kl >> nazwa) {
+                if (kl == "B") repozytorium.push_back(new KlasaB(nazwa));
+                else if (kl == "F") repozytorium.push_back(new KlasaF(nazwa));
+                else if (kl == "G") repository.push_back(new KlasaG(nazwa));
+                else if (kl == "H") repozytorium.push_back(new KlasaH(nazwa));
+                else if (kl == "I") repozytorium.push_back(new KlasaI(nazwa));
+                else if (kl == "J") repozytorium.push_back(new KlasaJ(nazwa));
             }
             std::cout << "Pomyslnie odczytano baze danych z pliku.\n";
         } else {
@@ -349,63 +327,58 @@ public:
     }
 };
 
-// ==========================================
-// INTERFEJS KONSOLOWY (CLI)
-// ==========================================
 int main() {
-    ObjectManager manager;
-    std::string command, arg;
+    MenedzerObiektow menedzer;
+    std::string komenda, argument;
 
     std::cout << "=== PROGRAM ROZPOZNAWANIA STRUKTURY KLAS ===\n";
     std::cout << "Wpisz 'TREE' aby wyswietlic strukture hierarchii.\n";
 
     while (true) {
         std::cout << "\nKONSOLA> ";
-        if (!(std::cin >> command)) break;
+        if (!(std::cin >> komenda)) break;
 
-        if (command == "EXIT" || command == "QUIT") {
+        if (komenda == "EXIT" || komenda == "QUIT") {
             break;
         }
-        else if (command == "TREE") {
-            manager.command_TREE();
+        else if (komenda == "TREE") {
+            menedzer.komenda_TREE();
         }
-        else if (command == "DIR") {
-            manager.command_DIR();
+        else if (komenda == "DIR") {
+            menedzer.komenda_DIR();
         }
-        else if (command == "SAVE") {
-            manager.command_SAVE();
+        else if (komenda == "SAVE") {
+            menedzer.komenda_SAVE();
         }
-        else if (command == "READ") {
-            manager.command_READ();
+        else if (komenda == "READ") {
+            menedzer.komenda_READ();
         }
-        else if (command == "CD") {
-            std::cin >> arg;
-            manager.command_CD(arg);
+        else if (komenda == "CD") {
+            std::cin >> argument;
+            menedzer.komenda_CD(argument);
         }
-        else if (command == "MO") {
-            std::cin >> arg;
-            manager.command_MO(arg);
+        else if (komenda == "MO") {
+            std::cin >> argument;
+            menedzer.komenda_MO(argument);
         }
-        else if (command == "DO") {
-            std::cin >> arg;
-            manager.command_DO(arg);
+        else if (komenda == "DO") {
+            std::cin >> argument;
+            menedzer.komenda_DO(argument);
         }
-        else if (command == "MDO") {
-            std::cin >> arg;
-            manager.command_MDO(arg); // Bezpieczne wywołanie - zapyta o nową nazwę wewnątrz funkcji
+        else if (komenda == "MDO") {
+            std::cin >> argument;
+            menedzer.komenda_MDO(argument);
         }
-        else if (command == "SHOW") {
-            std::cin >> arg;
-            manager.command_SHOW(arg);
+        else if (komenda == "SHOW") {
+            std::cin >> argument;
+            menedzer.komenda_SHOW(argument);
         }
         else {
             std::cout << "Blad: Nieznana komenda.\n";
-            // Czyszczenie linii w przypadku wpisania błędnych argumentów
-            std::string dummy;
-            std::getline(std::cin, dummy);
+            std::string smieci;
+            std::getline(std::cin, smieci);
         }
     }
 
     return 0;
-
-}x
+}
