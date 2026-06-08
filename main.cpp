@@ -172,7 +172,7 @@ public:
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
-        return p_wezel == "J" || KlasaE::dziedziczyZ(p_wezel);
+        return p_wezel == "J" || KlasE::dziedziczyZ(p_wezel);
     }
 };
 
@@ -227,16 +227,15 @@ public:
             return;
         }
 
-        auto it = std::remove_if(repozytorium.begin(), repozytorium.end(),
-            [&](KlasaA* p) { return p->pobierzNazwe() == p_nazwa && p->pobierzNazweKlasy() == biezacyWezel; });
-
-        if (it != repozytorium.end()) {
-            delete *it;
-            repozytorium.erase(it, repozytorium.end());
-            std::cout << "Usunieto obiekt '" << p_nazwa << "' z biezacego liscia.\n";
-        } else {
-            std::cout << "Nie znaleziono obiektu o nazwie '" << p_nazwa << "' w biezacym lisciu.\n";
+        for (auto it = repozytorium.begin(); it != repozytorium.end(); ++it) {
+            if ((*it)->pobierzNazwe() == p_nazwa && (*it)->pobierzNazweKlasy() == biezacyWezel) {
+                delete *it;
+                repozytorium.erase(it);
+                std::cout << "Usunieto obiekt '" << p_nazwa << "' z biezacego liscia.\n";
+                return;
+            }
         }
+        std::cout << "Nie znaleziono obiektu o nazwie '" << p_nazwa << "' w biezacym lisciu.\n";
     }
 
     void komenda_MDO(const std::string& p_nazwa) {
