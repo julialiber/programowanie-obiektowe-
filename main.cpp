@@ -38,7 +38,7 @@ public:
     KlasaB(std::string p_nazwa) : KlasaA(p_nazwa, "B"), chronionePoleB(20), prywatnePoleB(2.5) {}
 
     void wyswietl() const override {
-        std::cout << "[Klasa B] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleB << ", Prywatne: " << prywatnePoleB << "\n";
+        std::cout << "[Klasa B - Pionek] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleB << ", Prywatne: " << prywatnePoleB << "\n";
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
@@ -100,7 +100,7 @@ public:
     KlasaF(std::string p_nazwa) : KlasaC(p_nazwa, "F"), chronionePoleF(60), prywatnePoleF("PrivF") {}
 
     void wyswietl() const override {
-        std::cout << "[Klasa F] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleF << ", Prywatne: " << prywatnePoleF << "\n";
+        std::cout << "[Klasa F - Wieza] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleF << ", Prywatne: " << prywatnePoleF << "\n";
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
@@ -117,7 +117,7 @@ public:
     KlasaG(std::string p_nazwa) : KlasaC(p_nazwa, "G"), chronionePoleG(7.7), prywatnePoleG(false) {}
 
     void wyswietl() const override {
-        std::cout << "[Klasa G] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleG << ", Prywatne: " << prywatnePoleG << "\n";
+        std::cout << "[Klasa G - Goniec] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleG << ", Prywatne: " << prywatnePoleG << "\n";
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
@@ -134,7 +134,7 @@ public:
     KlasaH(std::string p_nazwa) : KlasaD(p_nazwa, "H"), chronionePoleH('H'), prywatnePoleH(80) {}
 
     void wyswietl() const override {
-        std::cout << "[Klasa H] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleH << ", Prywatne: " << prywatnePoleH << "\n";
+        std::cout << "[Klasa H - Skoczek] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleH << ", Prywatne: " << prywatnePoleH << "\n";
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
@@ -151,7 +151,7 @@ public:
     KlasaI(std::string p_nazwa) : KlasaD(p_nazwa, "I"), chronionePoleI("ProtI"), prywatnePoleI(9.9f) {}
 
     void wyswietl() const override {
-        std::cout << "[Klasa I] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleI << ", Prywatne: " << prywatnePoleI << "\n";
+        std::cout << "[Klasa I - Hetman] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleI << ", Prywatne: " << prywatnePoleI << "\n";
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
@@ -168,11 +168,11 @@ public:
     KlasaJ(std::string p_nazwa) : KlasaE(p_nazwa, "J"), chronionePoleJ(true), prywatnePoleJ(10.1) {}
 
     void wyswietl() const override {
-        std::cout << "[Klasa J] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleJ << ", Prywatne: " << prywatnePoleJ << "\n";
+        std::cout << "[Klasa J - Krol] Nazwa: " << pobierzNazwe() << ", Chronione: " << chronionePoleJ << ", Prywatne: " << prywatnePoleJ << "\n";
     }
 
     bool dziedziczyZ(const std::string& p_wezel) const override {
-        return p_wezel == "J" || KlasE::dziedziczyZ(p_wezel);
+        return p_wezel == "J" || KlasaE::dziedziczyZ(p_wezel);
     }
 };
 
@@ -199,15 +199,15 @@ public:
     void komenda_CD(const std::string& p_wezel) {
         if (czyPrawidlowyWezel(p_wezel)) {
             biezacyWezel = p_wezel;
-            std::cout << "Zmieniono wezel na: " << biezacyWezel << "\n";
+            std::cout << "Wybrano kategorie bierek: " << biezacyWezel << "\n";
         } else {
-            std::cout << "Blad: Wezel '" << p_wezel << "' nie istnieje w strukturze.\n";
+            std::cout << "Blad: Kategoria '" << p_wezel << "' nie istnieje w strukturze szachowej.\n";
         }
     }
 
     void komenda_MO(const std::string& p_nazwa) {
         if (!czyJestLisciem(biezacyWezel)) {
-            std::cout << "Blad: Obiekty mozna dodawac tylko do lisci (B, F, G, H, I, J).\n";
+            std::cout << "Blad: Konkretne figury mozna ustawiac tylko w liscach struktury (B, F, G, H, I, J).\n";
             return;
         }
 
@@ -218,12 +218,12 @@ public:
         else if (biezacyWezel == "I") repozytorium.push_back(new KlasaI(p_nazwa));
         else if (biezacyWezel == "J") repozytorium.push_back(new KlasaJ(p_nazwa));
 
-        std::cout << "Utworzono obiekt '" << p_nazwa << "' w klasie " << biezacyWezel << ".\n";
+        std::cout << "Ustawiono nowa figure '" << p_nazwa << "' w klasie " << biezacyWezel << ".\n";
     }
 
     void komenda_DO(const std::string& p_nazwa) {
         if (!czyJestLisciem(biezacyWezel)) {
-            std::cout << "Blad: Usuwanie jest dozwolone tylko z poziomu liscia.\n";
+            std::cout << "Blad: Zbijanie jest dozwolone tylko z poziomu konkretnego liscia.\n";
             return;
         }
 
@@ -231,42 +231,42 @@ public:
             if ((*it)->pobierzNazwe() == p_nazwa && (*it)->pobierzNazweKlasy() == biezacyWezel) {
                 delete *it;
                 repozytorium.erase(it);
-                std::cout << "Usunieto obiekt '" << p_nazwa << "' z biezacego liscia.\n";
+                std::cout << "Zbito figure '" << p_nazwa << "' z biezacej pozycji szachowej.\n";
                 return;
             }
         }
-        std::cout << "Nie znaleziono obiektu o nazwie '" << p_nazwa << "' w biezacym lisciu.\n";
+        std::cout << "Nie znaleziono figury o nazwie '" << p_nazwa << "' do zbicia na tym poziomie.\n";
     }
 
     void komenda_MDO(const std::string& p_nazwa) {
         if (!czyJestLisciem(biezacyWezel)) {
-            std::cout << "Blad: Modyfikacja jest dozwolona tylko z poziomu liscia.\n";
+            std::cout << "Blad: Promocja/modyfikacja jest dozwolona tylko z poziomu liscia.\n";
             return;
         }
 
         for (auto& ob : repozytorium) {
             if (ob->pobierzNazwe() == p_nazwa && ob->pobierzNazweKlasy() == biezacyWezel) {
                 std::string nowaNazwa;
-                std::cout << "Podaj nowa nazwe dla obiektu '" << p_nazwa << "': ";
+                std::cout << "Podaj nowa nazwe identyfikacyjna dla figury '" << p_nazwa << "': ";
                 std::cin >> nowaNazwa;
                 ob->ustawNazwe(nowaNazwa);
-                std::cout << "Zmodyfikowano nazwe obiektu na '" << nowaNazwa << "'.\n";
+                std::cout << "Zmieniono status figury na '" << nowaNazwa << "'.\n";
                 return;
             }
         }
-        std::cout << "Nie znaleziono takiego obiektu w biezacym lisciu.\n";
+        std::cout << "Nie znaleziono takiej figury w biezacym liscie.\n";
     }
 
     void komenda_DIR() {
-        std::cout << "--- Obiekty widoczne z wezla [" << biezacyWezel << "] ---\n";
+        std::cout << "--- Figury widoczne z poziomu kategorii [" << biezacyWezel << "] ---\n";
         int licznik = 0;
         for (const auto& ob : repozytorium) {
             if (ob->dziedziczyZ(biezacyWezel)) {
-                std::cout << "- " << ob->pobierzNazwe() << " (Klasa liscia: " << ob->pobierzNazweKlasy() << ")\n";
+                std::cout << "- " << ob->pobierzNazwe() << " (Typ: " << ob->pobierzNazweKlasy() << ")\n";
                 licznik++;
             }
         }
-        if (licznik == 0) std::cout << "Brak widocznych obiektow.\n";
+        if (licznik == 0) std::cout << "Brak ustawionych figur w tej gałęzi.\n";
     }
 
     void komenda_SHOW(const std::string& p_nazwa) {
@@ -276,20 +276,20 @@ public:
                 return;
             }
         }
-        std::cout << "Obiekt '" << p_nazwa << "' nie istnieje w calym systemie.\n";
+        std::cout << "Figura '" << p_nazwa << "' nie istnieje na szachownicy.\n";
     }
 
     void komenda_TREE() {
-        std::cout << "A (Korzen)\n"
-                  << " |-- B (Lisc)\n"
-                  << " |-- C\n"
-                  << " |    |-- F (Lisc)\n"
-                  << " |    |-- G (Lisc)\n"
-                  << " |-- D\n"
-                  << " |    |-- H (Lisc)\n"
-                  << " |    |-- I (Lisc)\n"
-                  << " |-- E\n"
-                  << "      |-- J (Lisc)\n";
+        std::cout << "A (Bierka Szachowa - Korzen)\n"
+                  << " |-- B (Pionek - Lisc)\n"
+                  << " |-- C (Figury Liniowe)\n"
+                  << " |    |-- F (Wieza - Lisc)\n"
+                  << " |    |-- G (Goniec - Lisc)\n"
+                  << " |-- D (Figury Specjalne)\n"
+                  << " |    |-- H (Skoczek - Lisc)\n"
+                  << " |    |-- I (Hetman - Lisc)\n"
+                  << " |-- E (Krolestwo)\n"
+                  << "      |-- J (Krol - Lisc)\n";
     }
 
     void komenda_SAVE() {
@@ -298,9 +298,9 @@ public:
             for (const auto& ob : repozytorium) {
                 plik << ob->serializuj() << "\n";
             }
-            std::cout << "Zapisano zbior obiektow do pliku 'baza_obiektow.txt'\n";
+            std::cout << "Zapisano aktualny stan partii do pliku 'baza_obiektow.txt'\n";
         } else {
-            std::cout << "Blad otwarcia pliku do zapisu.\n";
+            std::cout << "Blad zapisu stanu partii.\n";
         }
     }
 
@@ -319,9 +319,9 @@ public:
                 else if (kl == "I") repozytorium.push_back(new KlasaI(nazwa));
                 else if (kl == "J") repozytorium.push_back(new KlasaJ(nazwa));
             }
-            std::cout << "Pomyslnie odczytano baze danych z pliku.\n";
+            std::cout << "Pomyslnie wczytano stan partii z pliku.\n";
         } else {
-            std::cout << "Brak pliku zapisu lub blad odczytu.\n";
+            std::cout << "Brak zapisanego stanu partii szachowej.\n";
         }
     }
 };
@@ -330,50 +330,50 @@ int main() {
     MenedzerObiektow menedzer;
     std::string komenda, argument;
 
-    std::cout << "=== PROGRAM ROZPOZNAWANIA STRUKTURY KLAS ===\n";
-    std::cout << "Wpisz 'TREE' aby wyswietlic strukture hierarchii.\n";
+    std::cout << "=== SYSTEM ZARZADZANIA HIERARCHIA BIEREK SZACHOWYCH ===\n";
+    std::cout << "Wpisz 'PLANSZA' aby zobaczyc strukture klasyfikacji.\n";
 
     while (true) {
-        std::cout << "\nKONSOLA> ";
+        std::cout << "\nSZACHY> ";
         if (!(std::cin >> komenda)) break;
 
         if (komenda == "EXIT" || komenda == "QUIT") {
             break;
         }
-        else if (komenda == "TREE") {
+        else if (komenda == "PLANSZA") {
             menedzer.komenda_TREE();
         }
-        else if (komenda == "DIR") {
+        else if (komenda == "WIDOK") {
             menedzer.komenda_DIR();
         }
-        else if (komenda == "SAVE") {
+        else if (komenda == "ZAPISZ_PARTIE") {
             menedzer.komenda_SAVE();
         }
-        else if (komenda == "READ") {
+        else if (komenda == "WCZYTAJ_PARTIE") {
             menedzer.komenda_READ();
         }
-        else if (komenda == "CD") {
+        else if (komenda == "WYBIERZ") {
             std::cin >> argument;
             menedzer.komenda_CD(argument);
         }
-        else if (komenda == "MO") {
+        else if (komenda == "USTAW") {
             std::cin >> argument;
             menedzer.komenda_MO(argument);
         }
-        else if (komenda == "DO") {
+        else if (komenda == "ZBIJ") {
             std::cin >> argument;
             menedzer.komenda_DO(argument);
         }
-        else if (komenda == "MDO") {
+        else if (komenda == "PROMUJ") {
             std::cin >> argument;
             menedzer.komenda_MDO(argument);
         }
-        else if (komenda == "SHOW") {
+        else if (komenda == "STATUS") {
             std::cin >> argument;
             menedzer.komenda_SHOW(argument);
         }
         else {
-            std::cout << "Blad: Nieznana komenda.\n";
+            std::cout << "Blad: Nieprawidlowy ruch lub komenda szachowa.\n";
             std::string smieci;
             std::getline(std::cin, smieci);
         }
