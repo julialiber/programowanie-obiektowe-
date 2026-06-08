@@ -315,7 +315,8 @@ public:
             while (plik >> kl >> nazwa) {
                 if (kl == "B") repozytorium.push_back(new KlasaB(nazwa));
                 else if (kl == "F") repozytorium.push_back(new KlasaF(nazwa));
-                else if (kl == "G") repozytorium.push_back(new KlasaG(nazwa));                      else if (kl == "H") repozytorium.push_back(new KlasaH(nazwa));
+                else if (kl == "G") repozytorium.push_back(new KlasaG(nazwa));
+                else if (kl == "H") repozytorium.push_back(new KlasaH(nazwa));
                 else if (kl == "I") repozytorium.push_back(new KlasaI(nazwa));
                 else if (kl == "J") repozytorium.push_back(new KlasaJ(nazwa));
             }
